@@ -1,10 +1,6 @@
-.. image:: https://img.shields.io/badge/license-LGPL--3-green.svg
-    :target: https://www.gnu.org/licenses/lgpl-3.0-standalone.html
-    :alt: License: LGPL-3
-
 Open HRMS Loan Management
 ===========================
-This module facilitates the creation and management of employee loan requests.
+This module is customize ohrms_loan from Cybrosys, to accomodate multiple loan
 
 Configuration
 =============
