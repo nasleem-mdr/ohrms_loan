@@ -40,6 +40,8 @@
         'views/hr_loan_views.xml',
         'views/hr_payslip_views.xml',
         'views/hr_employee_views.xml',
+        'views/hr_manual_loan_payment_views.xml',  # Tambahkan baris ini
+        'security/security.xml',
     ],
     'demo': ['data/hr_salary_rule_demo.xml',
              'data/hr_rule_input_demo.xml', ],
