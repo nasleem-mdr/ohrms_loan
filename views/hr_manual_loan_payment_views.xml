@@ -1,0 +1,35 @@
+<odoo>
+    <!-- Form View untuk HrManualLoanPayment -->
+    <record id="view_hr_manual_loan_payment_form" model="ir.ui.view">
+        <field name="name">hr.manual.loan.payment.form</field>
+        <field name="model">hr.manual.loan.payment</field>
+        <field name="arch" type="xml">
+            <form string="Manual Loan Payment">
+                <sheet>
+                    <group>
+                        <field name="loan_line_id" required="1"/>
+                        <field name="payment_date" required="1"/>
+                        <field name="amount" required="1"/>
+                        <field name="notes"/>
+                    </group>
+                    <footer>
+                        <button string="Confirm Payment" type="object" name="action_confirm_payment" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action untuk membuka form HrManualLoanPayment -->
+    <record id="action_hr_manual_loan_payment" model="ir.actions.act_window">
+        <field name="name">Manual Loan Payment</field>
+        <field name="res_model">hr.manual.loan.payment</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu untuk mengakses action HrManualLoanPayment -->
+    <menuitem id="menu_hr_manual_loan_payment" name="Manual Loan Payment" action="action_hr_manual_loan_payment"
+              parent="hr_loan.menu_hr_loan_root" sequence="10"/>
+</odoo>
