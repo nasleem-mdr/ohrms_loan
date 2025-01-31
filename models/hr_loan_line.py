@@ -1,3 +1,5 @@
+from odoo import models, fields
+
 class HrLoanLine(models.Model):
     """ Model for managing details of loan request installments"""
     _name = "hr.loan.line"
