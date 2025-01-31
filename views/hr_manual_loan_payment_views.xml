@@ -22,7 +22,6 @@
                             <field name="date" readonly="1"/>
                             <field name="amount" readonly="1"/>
                             <field name="paid" readonly="1"/>
-                            <field name="is_manual_payment" readonly="1"/>
                         </tree>
                     </field>
                     <footer>
