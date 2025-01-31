@@ -7,11 +7,24 @@
             <form string="Manual Loan Payment">
                 <sheet>
                     <group>
-                        <field name="loan_line_id" required="1"/>
+                        <!-- Pilihan Karyawan -->
+                        <field name="employee_id" required="1"/>
+                        <!-- Pilihan Pinjaman (Loan) -->
+                        <field name="loan_id" required="1" domain="[('employee_id', '=', employee_id)]"/>
+                        <!-- Detail Pembayaran -->
                         <field name="payment_date" required="1"/>
                         <field name="amount" required="1"/>
                         <field name="notes"/>
                     </group>
+                    <!-- Tree View untuk Loan Lines -->
+                    <field name="loan_line_ids">
+                        <tree string="Loan Installments" editable="bottom">
+                            <field name="date" readonly="1"/>
+                            <field name="amount" readonly="1"/>
+                            <field name="paid" readonly="1"/>
+                            <field name="is_manual_payment" readonly="1"/>
+                        </tree>
+                    </field>
                     <footer>
                         <button string="Confirm Payment" type="object" name="action_confirm_payment" class="btn-primary"/>
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
@@ -20,18 +33,4 @@
             </form>
         </field>
     </record>
-
-    <!-- Action untuk membuka form HrManualLoanPayment -->
-    <record id="action_hr_manual_loan_payment" model="ir.actions.act_window">
-        <field name="name">Manual Loan Payment</field>
-        <field name="res_model">hr.manual.loan.payment</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <!-- Menu untuk mengakses action HrManualLoanPayment -->
-    <menuitem id="menu_hr_manual_loan_payment" 
-              name="Manual Loan Payment" 
-              action="action_hr_manual_loan_payment"
-              parent="hr_loan_menu_root" sequence="10"/>
 </odoo>
