@@ -32,4 +32,14 @@
             </form>
         </field>
     </record>
+    <menuitem id="hr_loan_menu_root" 
+        name="Loan Management" 
+        sequence="10"/>
+    <menuitem id="hr_loan_menu" 
+        name="Loans" parent="hr_loan_menu_root" 
+        action="action_hr_loan" sequence="10"/>
+    <menuitem id="hr_manual_loan_payment" 
+        name="Manual Loan Payment" 
+        action="action_hr_manual_loan_payment"
+        parent="hr_loan_menu_root" sequence="20"/>
 </odoo>
