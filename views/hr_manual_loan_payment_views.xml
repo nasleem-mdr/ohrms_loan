@@ -32,6 +32,12 @@
             </form>
         </field>
     </record>
+    <record id="action_hr_manual_loan_payment" model="ir.actions.act_window">
+        <field name="name">Manual Loan Payment</field>
+        <field name="res_model">hr.manual.loan.payment</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
     <menuitem id="hr_loan_menu_root" 
         name="Loan Management" 
         sequence="10"/>
