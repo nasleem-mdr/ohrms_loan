@@ -55,7 +55,7 @@ class HrPayslip(models.Model):
             for loan_line in loan.loan_lines:
                 # Pastikan loan_line.payment_date berada dalam rentang tanggal payslip
                 # dan loan_line belum dibayar (paid = False)
-                if (date_from <= loan_line.date <= date_to and not loan_line.paid):
+                if (date_from <= loan_line.date <= date_to and not loan_line.paid and not loan_line.is_manual_payment):
                     # Akumulasi jumlah pinjaman yang harus dibayar
                     total_loan_amount += loan_line.amount
 
@@ -72,7 +72,7 @@ class HrPayslip(models.Model):
         """ Compute the loan amount and remaining amount while confirming
             the payslip"""
         for line in self.input_line_ids:
-            if line.loan_line_id:
+            if line.loan_line_id and not line.loan_line_id.is_manual_payment:
                 # Tandai loan_line sebagai sudah dibayar
                 line.loan_line_id.paid = True
                 # Hitung ulang total amount loan
