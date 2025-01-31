@@ -21,14 +21,3 @@ class HrLoanLine(models.Model):
                                        help="Indicates whether the payment was made manually.")
     manual_payment_date = fields.Date(string='Manual Payment Date',
                                       help="Date when the manual payment was made.")
-
-    # Method untuk menandai pembayaran manual
-    def action_mark_as_paid_manually(self):
-        """Mark the installment as paid manually."""
-        for line in self:
-            if not line.paid:
-                line.write({
-                    'paid': True,
-                    'is_manual_payment': True,
-                    'manual_payment_date': fields.Date.today(),
-                })
