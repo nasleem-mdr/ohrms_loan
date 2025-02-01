@@ -1,12 +1,37 @@
 <odoo>
+    <!--Tree View of hr_manual_loan_payment model-->
+    <record id="hr_manual_loan_payment_view_tree" model="ir.ui.view">
+        <field name="name">hr.manual.loan.payment.view.tree</field>
+        <field name="model">hr.manual.loan.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Manual Payment">
+                <field name="employee_id"/>
+                <field name="loan_id"/>
+				<field name="payment_date"/>
+				<field name="amount"/>
+            </tree>
+        </field>
+    </record>
     <!-- Form View untuk HrManualLoanPayment -->
-    <record id="view_hr_manual_loan_payment_form" model="ir.ui.view">
-        <field name="name">hr.manual.loan.payment.form</field>
+    <record id="hr_manual_loan_payment_view_form" model="ir.ui.view">
+        <field name="name">hr.manual.loan.payment.view.form</field>
         <field name="model">hr.manual.loan.payment</field>
         <field name="arch" type="xml">
             <form string="Manual Loan Payment">
-                <sheet>
-                    <group>
+			    <header>
+                    <button name="action_confirm_payment" type="object"
+                            string="Confirm Payment" class="oe_highlight"/>
+                </header>
+				<sheet>
+				    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="employee_id" readonly="1"/>
+                        </h1>
+                    </div>
+					
+                    <group col="4">
                         <!-- Pilihan Karyawan -->
                         <field name="employee_id" required="1"/>
                         <!-- Pilihan Pinjaman (Loan) -->
@@ -24,28 +49,50 @@
                             <field name="paid" readonly="1"/>
                         </tree>
                     </field>
-                    <footer>
-                        <button string="Confirm Payment" type="object" name="action_confirm_payment" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
-                    </footer>
                 </sheet>
             </form>
         </field>
     </record>
-    <record id="action_hr_manual_loan_payment" model="ir.actions.act_window">
+	<!--Search View of hr_loan model-->
+    <record id="hr_manual_loan_payment_view_search" model="ir.ui.view">
+        <field name="name">hr.manual.loan.payment.view.search</field>
+        <field name="model">hr.manual.loan.payment</field>
+        <field name="arch" type="xml">
+            <search string="Payment">
+                <field name="employee_id" string="Employee"/>
+                <filter string="Employee" name="employee_id"
+                        context="{'group_by':'employee_id'}"/>
+                <filter string="Loan ID" name="loan_id"
+                        context="{'group_by':'loan_id'}"/>
+            </search>
+        </field>
+    </record>
+    <record id="hr_manual_loan_payment_action" model="ir.actions.act_window">
         <field name="name">Manual Loan Payment</field>
         <field name="res_model">hr.manual.loan.payment</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="hr_manual_loan_payment_view_search"/>
+		<field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Manual Payment.
+            </p>
+            <p>
+                Use this menu to create Manual Payment.
+            </p>
+        </field>
     </record>
-    <menuitem id="hr_loan_menu_root" 
-        name="Loan Management" 
-        sequence="10"/>
-    <menuitem id="hr_loan_menu" 
-        name="Loans" parent="hr_loan_menu_root" 
-        action="action_hr_loan" sequence="10"/>
+	<!-- Action for hr loan management -->
+    <record id="act_hr_manual_loan_payment_request" model="ir.actions.act_window">
+        <field name="name">Loans</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.manual.loan.payment</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_myloan': 1}</field>
+        <field name="view_id" eval="hr_manual_loan_payment_view_tree"/>
+    </record>
     <menuitem id="hr_manual_loan_payment" 
         name="Manual Loan Payment" 
-        action="action_hr_manual_loan_payment"
+        action="hr_manual_loan_payment_action"
         parent="hr_loan_menu_root" sequence="20"/>
 </odoo>

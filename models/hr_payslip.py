@@ -20,7 +20,7 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from odoo import models
+from odoo import models, api
 
 
 class HrPayslip(models.Model):
@@ -64,7 +64,7 @@ class HrPayslip(models.Model):
             if result.get('code') == 'LO':  # 'LO' adalah kode untuk input loan
                 result['amount'] = total_loan_amount
                 # Jika diperlukan, Anda bisa menyimpan ID loan_line yang diproses
-                result['loan_line_id'] = loan_line.id
+                #result['loan_line_id'] = loan_line.id
 
         return res
 
@@ -78,3 +78,14 @@ class HrPayslip(models.Model):
                 # Hitung ulang total amount loan
                 line.loan_line_id.loan_id._compute_total_amount()
         return super(HrPayslip, self).action_payslip_done()
+    
+    @api.model
+    def write(self, vals):
+        """Override the write method to trigger recomputation of fields
+        in the payroll module when changes are made in the ohrms_loan module."""
+        res = super(HrPayslip, self).write(vals)
+        
+        # Trigger the recomputation of fields in the payroll module
+        self.env['hr.payslip'].search([('id', 'in', self.ids)])._compute_fields()
+        
+        return res

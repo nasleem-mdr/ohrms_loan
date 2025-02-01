@@ -11,7 +11,7 @@ class HrManualLoanPayment(models.Model):
     payment_date = fields.Date(string='Payment Date', default=fields.Date.today(), required=True)
     amount = fields.Float(string='Amount', required=True)
     notes = fields.Text(string='Notes')
-
+    
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
         """Reset loan_id dan loan_line_ids saat employee_id berubah."""

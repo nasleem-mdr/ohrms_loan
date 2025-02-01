@@ -193,3 +193,8 @@ class HrLoanLine(models.Model):
     payslip_id = fields.Many2one('hr.payslip', string="Payslip Ref.",
                                  help="Reference to the associated "
                                       "payslip, if any.")
+    # Tambahkan field baru untuk pembayaran manual
+    is_manual_payment = fields.Boolean(string='Manual Payment', default=False,
+                                       help="Indicates whether the payment was made manually.")
+    manual_payment_date = fields.Date(string='Manual Payment Date',
+                                      help="Date when the manual payment was made.")
