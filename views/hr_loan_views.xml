@@ -139,7 +139,7 @@
         <field name="context">{'search_default_myloan': 1}</field>
         <field name="view_id" eval="hr_loan_view_tree"/>
     </record>
-    <!--Loan Menus-->
+    <!--Loan Menus in employee-->
     <menuitem id="hr_loan_menu_root" name="Loans &amp; Advances"
               parent="hr.menu_hr_root"
               sequence="20"/>

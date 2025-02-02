@@ -19,8 +19,15 @@
         <field name="arch" type="xml">
             <form string="Manual Loan Payment">
 			    <header>
-                    <button name="action_confirm_payment" type="object"
-                            string="Confirm Payment" class="oe_highlight"/>
+				    <field name="is_payment_confirmed" invisible="1"/>
+                    <button name="action_confirm_payment" 
+					type="object" string="Confirm Payment" 
+					class="oe_highlight" invisible="is_payment_confirmed"/>
+					<!-- Tombol Cancel Payment -->
+					<field name="show_cancel_button" invisible="1"/>
+					<button name="action_cancel_payment" 
+					type="object" string="Cancel Payment" 
+					class="oe_highlight" invisible="not show_cancel_button"/>
                 </header>
 				<sheet>
 				    <div class="oe_button_box" name="button_box">
@@ -38,7 +45,7 @@
                         <field name="loan_id" required="1" domain="[('employee_id', '=', employee_id)]"/>
                         <!-- Detail Pembayaran -->
                         <field name="payment_date" required="1"/>
-                        <field name="amount" required="1"/>
+                        <field name="amount" readonly="1" required="1"/>
                         <field name="notes"/>
                     </group>
                     <!-- Tree View untuk Loan Lines -->
