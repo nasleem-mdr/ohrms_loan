@@ -121,10 +121,22 @@ class HrLoan(models.Model):
              ('state', '=', 'approve'),
              ('balance_amount', '!=', 0)])
         if loan_count:
-            values['name'] = self.env['ir.sequence'].get('hr.loan.seq') or ' '
+            sequence = self.env['ir.sequence'].get('hr.loan.seq') or ' '
+            current_date = datetime.today()
+            month = current_date.strftime('%m')  # Format bulan 2 digit
+            year = current_date.strftime('%Y')  # Format tahun 4 digit
+            
+            # Gabungkan sequence, bulan, dan tahun untuk format yang diinginkan
+            values['name'] = f"{sequence}/{month}/{year}"
             return super(HrLoan, self).create(values)
         else:
-            values['name'] = self.env['ir.sequence'].get('hr.loan.seq') or ' '
+            sequence = self.env['ir.sequence'].get('hr.loan.seq') or ' '
+            current_date = datetime.today()
+            month = current_date.strftime('%m')  # Format bulan 2 digit
+            year = current_date.strftime('%Y')  # Format tahun 4 digit
+            
+            # Gabungkan sequence, bulan, dan tahun untuk format yang diinginkan
+            values['name'] = f"{sequence}/{month}/{year}"
             return super(HrLoan, self).create(values)
 
     def action_compute_installment(self):

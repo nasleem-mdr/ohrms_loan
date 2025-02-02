@@ -1,15 +1,19 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+from datetime import datetime
 
 class HrManualLoanPayment(models.Model):
     _name = 'hr.manual.loan.payment'
     _description = 'Manual Loan Payment'
+    _order = 'id desc'  # Urutan record berdasarkan ID terbaru
 
+    name = fields.Char(string='Reference', readonly=True, default='New')  # Field untuk menyimpan sequence number
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
     loan_id = fields.Many2one('hr.loan', string='Loan', domain="[('employee_id', '=', employee_id)]")
     loan_line_ids = fields.Many2many('hr.loan.line', string='Loan Installments',
                                      domain="[('loan_id', '=', loan_id), ('paid', '=', False)]")
     payment_date = fields.Date(string='Payment Date', default=fields.Date.today(), required=True)
-    amount = fields.Float(string='Amount', compute="_compute_amount", store=True, required=True)  # Field komputasi
+    amount = fields.Float(string='Amount', compute="_compute_amount", store=True)
     notes = fields.Text(string='Notes')
 
     # Field komputasi untuk menentukan visibilitas tombol Confirm Payment
@@ -75,3 +79,26 @@ class HrManualLoanPayment(models.Model):
                     'is_manual_payment': False,  # Reset status manual payment
                     'manual_payment_date': False,  # Reset tanggal pembayaran manual
                 })
+
+    def unlink(self):
+        """Override method unlink untuk mencegah penghapusan jika ada loan_line yang sudah dibayar."""
+        for payment in self:
+            if any(line.paid for line in payment.loan_line_ids):
+                raise ValidationError("Tidak dapat menghapus pembayaran karena ada loan line yang sudah dibayar.")
+        return super(HrManualLoanPayment, self).unlink()
+
+    @api.model
+    def create(self, vals):
+        """Override method create untuk menghasilkan sequence number dengan suffix tahun."""
+        if vals.get('name', 'New') == 'New':
+            # Generate sequence number menggunakan ir.sequence
+            sequence = self.env['ir.sequence'].next_by_code('hr.manual.loan.payment')
+            
+            # Ambil bulan dan tahun saat ini
+            current_date = datetime.today()
+            month = current_date.strftime('%m')  # Format bulan 2 digit
+            year = current_date.strftime('%Y')  # Format tahun 4 digit
+            
+            # Gabungkan sequence, bulan, dan tahun untuk format yang diinginkan
+            vals['name'] = f"{sequence}/{month}/{year}"
+        return super(HrManualLoanPayment, self).create(vals)

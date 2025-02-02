@@ -1,0 +1,10 @@
+<odoo>
+    <!-- Sequence untuk hr.manual.loan.payment -->
+    <record id="seq_hr_manual_loan_payment" model="ir.sequence">
+        <field name="name">Manual Loan Payment Reference</field>
+        <field name="code">hr.manual.loan.payment</field>
+        <field name="prefix">MLP/</field>  <!-- Prefix untuk sequence number -->
+        <field name="padding">4</field>    <!-- Panjang sequence number (misalnya, MLP/0001/2023) -->
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

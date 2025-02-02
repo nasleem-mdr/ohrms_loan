@@ -18,46 +18,48 @@
         <field name="model">hr.manual.loan.payment</field>
         <field name="arch" type="xml">
             <form string="Manual Loan Payment">
-			    <header>
-				    <field name="is_payment_confirmed" invisible="1"/>
-                    <button name="action_confirm_payment" 
-					type="object" string="Confirm Payment" 
-					class="oe_highlight" invisible="is_payment_confirmed"/>
-					<!-- Tombol Cancel Payment -->
-					<field name="show_cancel_button" invisible="1"/>
-					<button name="action_cancel_payment" 
-					type="object" string="Cancel Payment" 
-					class="oe_highlight" invisible="not show_cancel_button"/>
-                </header>
-				<sheet>
-				    <div class="oe_button_box" name="button_box">
-                    </div>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="employee_id" readonly="1"/>
-                        </h1>
-                    </div>
-					
-                    <group col="4">
-                        <!-- Pilihan Karyawan -->
-                        <field name="employee_id" required="1"/>
-                        <!-- Pilihan Pinjaman (Loan) -->
-                        <field name="loan_id" required="1" domain="[('employee_id', '=', employee_id)]"/>
-                        <!-- Detail Pembayaran -->
-                        <field name="payment_date" required="1"/>
-                        <field name="amount" readonly="1" required="1"/>
-                        <field name="notes"/>
-                    </group>
-                    <!-- Tree View untuk Loan Lines -->
-                    <field name="loan_line_ids">
-                        <tree string="Loan Installments" editable="bottom">
-                            <field name="date" readonly="1"/>
-                            <field name="amount" readonly="1"/>
-                            <field name="paid" readonly="1"/>
-                        </tree>
-                    </field>
-                </sheet>
-            </form>
+    <header>
+        <!-- Tombol Confirm Payment -->
+        <field name="is_payment_confirmed" invisible="1"/>
+        <button name="action_confirm_payment" type="object"
+                string="Confirm Payment" class="oe_highlight"
+                invisible="is_payment_confirmed"/>
+        
+        <!-- Tombol Cancel Payment -->
+        <field name="show_cancel_button" invisible="1"/>
+        <button name="action_cancel_payment" type="object"
+                string="Cancel Payment" class="oe_highlight"
+                invisible="not show_cancel_button"/>
+    </header>
+    <sheet>
+        <div class="oe_button_box" name="button_box">
+        </div>
+        <div class="oe_title">
+            <h1>
+                <field name="name" readonly="1"/>  <!-- Tampilkan sequence number -->
+            </h1>
+        </div>
+        
+        <group col="4">
+            <!-- Pilihan Karyawan -->
+            <field name="employee_id" required="1"/>
+            <!-- Pilihan Pinjaman (Loan) -->
+            <field name="loan_id" required="1" domain="[('employee_id', '=', employee_id)]"/>
+            <!-- Detail Pembayaran -->
+            <field name="payment_date" required="1"/>
+            <field name="amount" readonly="1"/>
+            <field name="notes"/>
+        </group>
+        <!-- Tree View untuk Loan Lines -->
+        <field name="loan_line_ids">
+            <tree string="Loan Installments" editable="bottom">
+                <field name="date" readonly="1"/>
+                <field name="amount" readonly="1"/>
+                <field name="paid" readonly="1"/>
+            </tree>
+        </field>
+    </sheet>
+</form>
         </field>
     </record>
 	<!--Search View of hr_loan model-->
