@@ -84,8 +84,8 @@ class HrPayslip(models.Model):
         """Override the write method to trigger recomputation of fields
         in the payroll module when changes are made in the ohrms_loan module."""
         res = super(HrPayslip, self).write(vals)
-        
-        # Trigger the recomputation of fields in the payroll module
-        self.env['hr.payslip'].search([('id', 'in', self.ids)])._compute_fields()
-        
+    
+        # Recompute specific fields if they are computed fields
+        self.env['hr.payslip'].search([('id', 'in', self.ids)]).recompute()
+    
         return res
