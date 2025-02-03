@@ -86,6 +86,6 @@ class HrPayslip(models.Model):
         res = super(HrPayslip, self).write(vals)
     
         # Recompute specific fields if they are computed fields
-        self.env['hr.payslip'].search([('id', 'in', self.ids)]).recompute()
+        # self.env['hr.payslip'].search([('id', 'in', self.ids)]).recompute()
     
         return res
