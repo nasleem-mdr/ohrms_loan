@@ -78,21 +78,14 @@ class HrPayslip(models.Model):
                 # Hitung ulang total amount loan
                 line.loan_line_id.loan_id._compute_total_amount()
         return super(HrPayslip, self).action_payslip_done()
-    
-    @api.model
-    def _compute_fields(self):
-        """Compute necessary fields after writing to the payslip."""
-        for payslip in self:
-            # Add your field computation logic here
-            payslip.compute_some_field()
-    
+
     @api.model
     def write(self, vals):
-        """Override the write method to trigger recomputation of fields
-        in the payroll module when changes are made in the ohrms_loan module."""
+        """Override the write method to invalidate the cache and force recomputation
+        of fields in the payroll module when changes are made in the ohrms_loan module."""
         res = super(HrPayslip, self).write(vals)
         
-        # Trigger the recomputation of fields in the payroll module
-        self.env['hr.payslip'].search([('id', 'in', self.ids)])._compute_fields()
+        # Invalidate the cache for the updated records
+        self.invalidate_cache()
         
         return res
