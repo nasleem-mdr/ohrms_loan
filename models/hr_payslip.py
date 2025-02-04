@@ -86,6 +86,6 @@ class HrPayslip(models.Model):
         res = super(HrPayslip, self).write(vals)
         
         # Invalidate the cache for the updated records
-        self.invalidate_cache()
+        # self.invalidate_cache()
         
         return res
