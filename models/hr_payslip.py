@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from odoo import models, api
+from odoo import models, api, fields
 
 
 class HrPayslip(models.Model):
     """ Extends the 'hr.payslip' model to include
     additional functionality related to employee loans."""
     _inherit = 'hr.payslip'
+
+    loan_amount = fields.Float(string="Loan Amount", compute="_compute_loan_amount", store=True)
 
     def get_inputs(self, contract_ids, date_from, date_to):
         """Compute additional inputs for the employee payslip,
@@ -49,16 +51,30 @@ class HrPayslip(models.Model):
                 line.loan_line_id.paid = True
                 # Recompute the total loan amount
                 line.loan_line_id.loan_id._compute_total_amount()
+        
+        # Recompute the loan amount after payslip is confirmed
+        self._compute_loan_amount()
+        
         return super(HrPayslip, self).action_payslip_done()
+
+    @api.depends('input_line_ids')
+    def _compute_loan_amount(self):
+        """Compute the total loan amount for the payslip."""
+        for payslip in self:
+            loan_amount = 0.0
+            for line in payslip.input_line_ids:
+                if line.code == 'LO':
+                    loan_amount += line.amount
+            payslip.loan_amount = loan_amount
 
     @api.model
     def write(self, vals):
-        """Override the write method to invalidate the cache
-        and force recomputation of fields in the payroll module."""
+        """Override the write method to trigger recomputation of fields
+        in the payroll module when changes are made in the ohrms_loan module."""
         res = super(HrPayslip, self).write(vals)
         
-        # Invalidate the cache for the updated records
-        if self.ids:
-            self.env.invalidate_all()
+        # Trigger recomputation of fields
+        if 'input_line_ids' in vals:
+            self._compute_loan_amount()
         
         return res
