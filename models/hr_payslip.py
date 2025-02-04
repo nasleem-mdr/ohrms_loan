@@ -1,25 +1,4 @@
 # -*- coding: utf-8 -*-
-#############################################################################
-#    A part of Open HRMS Project <https://www.openhrms.com>
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#
-#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU LESSER
-#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
-#
-#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
-#    (LGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
-#
-#############################################################################
 from odoo import models, api
 
 
@@ -30,62 +9,56 @@ class HrPayslip(models.Model):
 
     def get_inputs(self, contract_ids, date_from, date_to):
         """Compute additional inputs for the employee payslip,
-        considering active loans.
-        :param contract_ids: Contract ID of the current employee.
-        :param date_from: Start date of the payslip.
-        :param date_to: End date of the payslip.
-        :return: List of dictionaries representing additional inputs for
-        the payslip."""
+        considering active loans."""
         res = super(HrPayslip, self).get_inputs(contract_ids, date_from, date_to)
         
-        # Ambil employee_id dari kontrak atau dari payslip
+        # Get employee_id from contract or payslip
         employee_id = self.env['hr.contract'].browse(
             contract_ids[0].id).employee_id if contract_ids else self.employee_id
         
-        # Cari semua loan yang disetujui (state = 'approve') untuk employee tersebut
+        # Find all approved loans for the employee
         loan_ids = self.env['hr.loan'].search(
             [('employee_id', '=', employee_id.id), ('state', '=', 'approve')])
         
-        # Inisialisasi total jumlah pinjaman yang harus dibayar dalam periode ini
+        # Initialize total loan amount for the period
         total_loan_amount = 0.0
         
-        # Loop melalui semua loan yang disetujui
+        # Loop through all approved loans
         for loan in loan_ids:
-            # Loop melalui semua loan lines (angsuran) dari loan tersebut
+            # Loop through all loan lines (installments) for the loan
             for loan_line in loan.loan_lines:
-                # Pastikan loan_line.payment_date berada dalam rentang tanggal payslip
-                # dan loan_line belum dibayar (paid = False)
+                # Ensure the loan line date is within the payslip period
+                # and the loan line is not paid
                 if (date_from <= loan_line.date <= date_to and not loan_line.paid and not loan_line.is_manual_payment):
-                    # Akumulasi jumlah pinjaman yang harus dibayar
+                    # Accumulate the loan amount
                     total_loan_amount += loan_line.amount
 
-        # Update input payslip dengan total jumlah pinjaman
+        # Update the payslip input with the total loan amount
         for result in res:
-            if result.get('code') == 'LO':  # 'LO' adalah kode untuk input loan
+            if result.get('code') == 'LO':  # 'LO' is the code for loan input
                 result['amount'] = total_loan_amount
-                # Jika diperlukan, Anda bisa menyimpan ID loan_line yang diproses
-                #result['loan_line_id'] = loan_line.id
 
         return res
 
     def action_payslip_done(self):
-        """ Compute the loan amount and remaining amount while confirming
-            the payslip"""
+        """Mark loan lines as paid and recompute the total loan amount
+        when the payslip is confirmed."""
         for line in self.input_line_ids:
             if line.loan_line_id and not line.loan_line_id.is_manual_payment:
-                # Tandai loan_line sebagai sudah dibayar
+                # Mark the loan line as paid
                 line.loan_line_id.paid = True
-                # Hitung ulang total amount loan
+                # Recompute the total loan amount
                 line.loan_line_id.loan_id._compute_total_amount()
         return super(HrPayslip, self).action_payslip_done()
 
     @api.model
     def write(self, vals):
-        """Override the write method to invalidate the cache and force recomputation
-        of fields in the payroll module when changes are made in the ohrms_loan module."""
+        """Override the write method to invalidate the cache
+        and force recomputation of fields in the payroll module."""
         res = super(HrPayslip, self).write(vals)
         
         # Invalidate the cache for the updated records
-        self.invalidate_cache()
+        if self.ids:
+            self.env.invalidate_all()
         
         return res
