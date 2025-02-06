@@ -193,20 +193,24 @@ class HrLoanLine(models.Model):
     _name = "hr.loan.line"
     _description = "Installment Line"
 
-    date = fields.Date(string="Payment Date", required=True,
-                       help="Date of the payment")
-    employee_id = fields.Many2one('hr.employee', string="Employee",
-                                  help="Employee")
+    date = fields.Date(string="Payment Date", required=True, help="Date of the payment")
+    employee_id = fields.Many2one('hr.employee', string="Employee", help="Employee")
     amount = fields.Float(string="Amount", required=True, help="Amount")
-    paid = fields.Boolean(string="Paid", help="Indicates whether the "
-                                              "installment has been paid.")
-    loan_id = fields.Many2one('hr.loan', string="Loan Ref.",
-                              help="Reference to the associated loan.")
-    payslip_id = fields.Many2one('hr.payslip', string="Payslip Ref.",
-                                 help="Reference to the associated "
-                                      "payslip, if any.")
+    paid = fields.Boolean(string="Paid", help="Indicates whether the installment has been paid.")
+    loan_id = fields.Many2one('hr.loan', string="Loan Ref.", help="Reference to the associated loan.")
+    payslip_id = fields.Many2one('hr.payslip', string="Payslip Ref.", help="Reference to the associated payslip, if any.")
+
+    # Tambahkan field sequence_number
+    sequence_number = fields.Integer(string="No.", compute="_compute_sequence_number", store=True)
+
+    # Tambahkan perhitungan nomor urut cicilan berdasarkan tanggal pembayaran
+    @api.depends('loan_id', 'date')
+    def _compute_sequence_number(self):
+        for loan in self.mapped('loan_id'):
+            lines = loan.loan_lines.sorted(lambda l: l.date)
+            for index, line in enumerate(lines, start=1):
+                line.sequence_number = index
+
     # Tambahkan field baru untuk pembayaran manual
-    is_manual_payment = fields.Boolean(string='Manual Payment', default=False,
-                                       help="Indicates whether the payment was made manually.")
-    manual_payment_date = fields.Date(string='Manual Payment Date',
-                                      help="Date when the manual payment was made.")
+    is_manual_payment = fields.Boolean(string='Manual Payment', default=False, help="Indicates whether the payment was made manually.")
+    manual_payment_date = fields.Date(string='Manual Payment Date', help="Date when the manual payment was made.")

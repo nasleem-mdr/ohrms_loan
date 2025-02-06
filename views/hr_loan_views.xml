@@ -14,6 +14,7 @@
             </tree>
         </field>
     </record>
+
     <!--Form View of hr_loan model-->
     <record id="hr_loan_view_form" model="ir.ui.view">
         <field name="name">hr.loan.view.form</field>
@@ -24,8 +25,8 @@
                     <button name="action_compute_installment" type="object"
                             string="Compute Installment" class="oe_highlight"
                             invisible="state in ('approve','refuse')"/>
-                    <button name="action_submit" type="object" string="Submit" invisible="state != 'draft'"
-                            class="oe_highlight"/>
+                    <button name="action_submit" type="object" string="Submit" 
+                            invisible="state != 'draft'" class="oe_highlight"/>
                     <button name="action_approve" type="object"
                             string="Approve" invisible="state != 'waiting_approval_1'"
                             class="oe_highlight"
@@ -34,7 +35,8 @@
                             invisible="state not in ['draft','waiting_approval_1']"
                             class="oe_highlight"
                             groups="hr.group_hr_manager"/>
-                    <button name="action_cancel" type="object" string="Cancel" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel" 
+                            invisible="state != 'draft'"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,waiting_approval_1,approve"/>
                 </header>
@@ -64,10 +66,11 @@
                         <page string="Installments">
                             <field name="loan_lines">
                                 <tree string="Installments" editable="bottom">
-                                    <field name="date"/>
-                                    <field name="amount"/>
-                                    <field name="paid"
-                                           column_invisible="True"/>
+                                    <!-- Tambahkan Kolom Nomor Urut -->
+                                    <field name="sequence_number" string="No." position="attribute"/>
+                                    <field name="date" position="attribute"/>
+                                    <field name="amount" position="attribute"/>
+                                    <field name="paid" column_invisible="False"/>
                                 </tree>
                             </field>
                             <group class="oe_subtotal_footer oe_right"
@@ -94,6 +97,7 @@
             </form>
         </field>
     </record>
+
     <!--Search View of hr_loan model-->
     <record id="hr_loan_view_search" model="ir.ui.view">
         <field name="name">hr.loan.view.search</field>
@@ -113,6 +117,7 @@
             </search>
         </field>
     </record>
+
     <!-- Action for loan request-->
     <record id="hr_loan_action" model="ir.actions.act_window">
         <field name="name">Request for Loan</field>
@@ -129,6 +134,7 @@
             </p>
         </field>
     </record>
+
     <!-- Action for hr loan management -->
     <record id="act_hr_employee_loan_request" model="ir.actions.act_window">
         <field name="name">Loans</field>
@@ -139,6 +145,7 @@
         <field name="context">{'search_default_myloan': 1}</field>
         <field name="view_id" eval="hr_loan_view_tree"/>
     </record>
+
     <!--Loan Menus in employee-->
     <menuitem id="hr_loan_menu_root" name="Loans &amp; Advances"
               parent="hr.menu_hr_root"
