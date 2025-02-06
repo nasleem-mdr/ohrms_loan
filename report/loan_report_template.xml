@@ -6,6 +6,7 @@
                 <t t-call="web.external_layout">
                     <div class="page">
                         <h1 style="text-align: center;">Pinjaman Koperasi/Advance</h1>
+<<<<<<< HEAD
                         <table style="width: 100%; margin-top: 20px; border-collapse: separate; border: none;">
                             <tr>
                                 <td style="width: 35%; padding: 10px;">Nomor </td>
@@ -33,7 +34,29 @@
                                 <td style="width: 35%; padding: 10px;">Jangka Waktu (bln)</td>
 								<td style="width: 5%; padding: 10px;">:</td>
                                 <td style="width: 60%; padding: 10px;"><t t-esc="doc.installment"/> bln</td>
+=======
+                        <table style="width: 100%; margin-top: 20px; border: none; border-collapse: collapse;">
+                            <tr style="border: none; border-collapse: collapse;">
+                                <td style="border: none; border-collapse: collapse; width: 25%; padding: 10px;">Nomor Register</td>
+                                <td style="border: none; border-collapse: collapse; width: 75%; padding: 10px;">: <t t-esc="doc.name"/></td>
                             </tr>
+                            <tr style="border: none; border-collapse: collapse;">
+                                <td style="border: none; border-collapse: collapse; width: 25%; padding: 10px;">Nama Karyawan</td>
+                                <td style="border: none; border-collapse: collapse; width: 75%; padding: 10px;">: <t t-esc="doc.employee_id.name"/></td>
+                            </tr>
+                            <tr style="border: none; border-collapse: collapse;">
+                                <td style="border: none; border-collapse: collapse; width: 25%; padding: 10px;">Tanggal Register</td>
+                                <td style="border: none; border-collapse: collapse; width: 75%; padding: 10px;">: <t t-esc="doc.date"/></td>
+                            </tr>
+                            <tr style="border: none; border-collapse: collapse;">
+                                <td style="border: none; border-collapse: collapse; width: 25%; padding: 10px;">Total Pinjaman</td>
+                                <td style="border: none; border-collapse: collapse; width: 75%; padding: 10px;">: <span t-field="doc.total_amount" t-field-options='{"widget": "monetary"}'/></td>
+>>>>>>> ade81ffbf564e0cd399a9bbc885d63abeaf0c4d1
+                            </tr>
+                            <tr style="border: none; border-collapse: collapse;">
+                                <td style="border: none; border-collapse: collapse; width: 25%; padding: 10px;">Jangka Waktu (bln)</td>
+                                <td style="border: none; border-collapse: collapse; width: 75%; padding: 10px;">: <t t-esc="doc.installment"/> bln</td>
+                            </tr>   
                         </table>
                         <h2 style="margin-top: 30px;">Jadwal Pembayaran</h2>
                         <table style="width: 100%; border-collapse: collapse; margin-top: 10px;" border="1">
