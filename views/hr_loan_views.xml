@@ -64,15 +64,15 @@
                     </group>
                     <notebook>
                         <page string="Installments">
-                            <field name="loan_lines">
-                                <tree string="Installments" editable="bottom">
-                                    <!-- Tambahkan Kolom Nomor Urut -->
-                                    <field name="sequence_number" string="No." position="attribute"/>
-                                    <field name="date" position="attribute"/>
-                                    <field name="amount" position="attribute"/>
-                                    <field name="paid" column_invisible="False"/>
-                                </tree>
-                            </field>
+                            <field name="loan_lines"> 
+								<tree string="Installments" editable="bottom">
+									<!-- Tambahkan Kolom Nomor Urut dengan Width Lebih Kecil -->
+									<field name="sequence_number" string="No." width="10"/>
+									<field name="date" width="15"/>
+									<field name="amount"/>
+									<field name="paid" column_invisible="False"/>
+								</tree>
+							</field>
                             <group class="oe_subtotal_footer oe_right"
                                    colspan="2">
                                 <field name="total_amount" widget="monetary"
@@ -148,7 +148,7 @@
 
     <!--Loan Menus in employee-->
     <menuitem id="hr_loan_menu_root" name="Loans &amp; Advances"
-              parent="hr.menu_hr_root"
+              parent="hr_payroll_community.menu_hr_payroll_community_root"
               sequence="20"/>
     <menuitem id="hr_loan_menu" name="Loan"
               parent="hr_loan_menu_root"

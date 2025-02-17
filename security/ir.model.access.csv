@@ -8,3 +8,4 @@ access_hr_loan_manager,access.hr.loan.manager,model_hr_loan,hr.group_hr_manager,
 access_hr_loan_line_manager,access.hr.loan.line.manager,model_hr_loan_line,hr.group_hr_manager,1,1,1,1
 access_hr_manual_loan_payment_officer,access.hr.manual.loan.payment.officer,model_hr_manual_loan_payment,hr.group_hr_user,1,1,1,1
 access_hr_manual_loan_payment_manager,access.hr.manual.loan.payment.manager,model_hr_manual_loan_payment,hr.group_hr_manager,1,1,1,1
+access_menu_hr_loan_view_report_manager,access.hr.loan.view.report.manager,model_hr_loan_report,hr.group_hr_manager,1,1,1,1

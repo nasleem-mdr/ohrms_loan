@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--hr_payslip view for adding Send Mail Button -->
+    <record id="hr_loan_report_view_form" model="ir.ui.view">
+        <field name="name">hr.loan.report.view.form.inherit.hr.loan.report</field>
+        <field name="model">hr.loan</field>
+        <field name="inherit_id"
+               ref="ohrms_loan.hr_loan_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//button[@name="action_compute_installment"]' position='after'>
+                <button string="Submit"
+                        name="action_submit"
+                        type="object"
+                        class="oe_highlight" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
